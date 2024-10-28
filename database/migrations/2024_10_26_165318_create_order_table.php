@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('shipping_address');
             $table->date('order_date');
             $table->date('delivery_date');
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users');
         });
         
     }

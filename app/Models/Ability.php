@@ -16,4 +16,16 @@ class Ability extends Model
     ];
 
     public $timestamps = false;
+
+    public function user () {
+        return $this-> belongsTo(User::class, 'id_user');
+    }
+
+    public function exchange () {
+        return $this-> belongsToMany(Exchange::class,'id_ability_offered');
+    }
+
+    public function review () {
+        return $this-> belongsTo(Review::class,'id_ability');
+    }
 }
