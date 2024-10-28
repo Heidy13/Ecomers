@@ -17,6 +17,8 @@ class Product extends Model
         'id_category'
     ];
 
+    public $timestamps = false;
+
     public function user() {
         return $this ->belongsTo(User::class, 'id_user');
     }

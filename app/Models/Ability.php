@@ -16,4 +16,12 @@ class Ability extends Model
     ];
 
     public $timestamps = false;
+
+    public function exchange_requested(){
+        return $this->hasMany(Exchange::class, 'id_ability_requested');
+    }
+
+    public function exchange_offered(){
+        return $this->hasMany(Exchange::class, 'id_ability_offered');
+    }
 }

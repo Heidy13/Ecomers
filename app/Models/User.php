@@ -47,6 +47,14 @@ class User extends Authenticatable
         // return $this->hasMany(::class, 'id_user')
     }
 
+    public function exchange_aplicant(){
+        return $this->hasMany(Exchange::class, 'id_user_applicant');
+    }
+
+    public function exchange_receiver(){
+        return $this->hasMany(Exchange::class, 'id_user_receiver');
+    }
+
 
 
     /**
