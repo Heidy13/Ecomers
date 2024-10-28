@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('description');
             $table->string('price');
             $table->string('stock');
-            $table->string('imagen');
-            $table->date('fecha_creacion');
+            $table->string('image');
+            $table->date('create_date');
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
             $table->unsignedBigInteger('id_category');
