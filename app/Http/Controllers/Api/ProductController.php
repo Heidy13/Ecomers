@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -11,7 +13,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            
+            $product = Product::all();
+            return response()->json($product);
+            
+        } catch (Exception $e) {
+            return response()->json(['error' => 'error: '.$e->getMessage()]);
+        }
+        
     }
 
     /**
