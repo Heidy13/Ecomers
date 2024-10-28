@@ -29,4 +29,6 @@ class Review extends Model
         return $this-> hasMany(Ability::class, 'id_ablility');
     }
 
+    public $timestamps = false;
+
 }

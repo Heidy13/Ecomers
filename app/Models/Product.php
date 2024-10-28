@@ -30,4 +30,8 @@ class Product extends Model
     public function review () {
         return $this-> belongsTo(Review::class, 'id_product');
     }
+
+    public function request_detail () {
+        return $this-> belongsTo(Request_detail::class, 'id_product');
+    }
 }

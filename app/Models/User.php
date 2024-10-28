@@ -25,38 +25,38 @@ class User extends Authenticatable
         'date_register'
     ];
 
-     public $timestamps = false;
-
+    
     public function product () {
         return $this->hasMany(Product::class, 'id_user');
     }
-
+    
     public function ability () {
         // return $this->hasMany(::class, 'id_user');
     }
-
+    
     public function cart () {
         // return $this->hasOne(Cart::class, 'id_user');
     }
-
+    
     public function orders () {
         return $this->hasMany(Order::class, 'id_user');
     }
-
+    
     public function review () {
         return $this->hasMany(Review::class, 'id_user');
     }
-
+    
     public function exchange_aplicant(){
         return $this->hasMany(Exchange::class, 'id_user_applicant');
     }
-
+    
     public function exchange_receiver(){
         return $this->hasMany(Exchange::class, 'id_user_receiver');
     }
-
-
-
+    
+    public $timestamps = false;
+    
+    
     /**
      * The attributes that should be hidden for serialization.
      *
