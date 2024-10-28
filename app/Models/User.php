@@ -22,29 +22,29 @@ class User extends Authenticatable
         'biography',
         'profile_photo',
         'role',
-        'date_register',
+        'date_register'
     ];
 
      public $timestamps = false;
 
     public function product () {
-        // return $this->hasMany(::class, 'id_user');
+        return $this->hasMany(Product::class, 'id_user');
     }
 
     public function ability () {
-        return $this->hasMany(Ability::class, 'id_user');
+        // return $this->hasMany(::class, 'id_user');
     }
 
     public function cart () {
-        return $this->hasOne(Cart::class, 'id_user');
+        // return $this->hasOne(Cart::class, 'id_user');
     }
 
     public function orders () {
-        // return $this->hasMany(::class, 'id_user')
+        return $this->hasMany(Order::class, 'id_user');
     }
 
     public function review () {
-        // return $this->hasMany(::class, 'id_user')
+        return $this->hasMany(Review::class, 'id_user');
     }
 
     public function exchange_aplicant(){

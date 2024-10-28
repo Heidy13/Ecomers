@@ -15,8 +15,8 @@ class Category extends Model
     public $timestamps = false;
 
     public function product () {
-        // return $this->belongsToMany(::class , 'id_category');
+        return $this->belongsToMany(Product::class , 'id_category');
     }
-    
+
 
 }
