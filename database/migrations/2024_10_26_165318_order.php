@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $table->id();
-        $table->enum('state',['pendant', 'in_progress', 'complete', 'canceled']);
-        $table->float('total');
-        $table->string('shipping_address');
-        $table->date('order_date');
-        $table->date('delivery_date');
+        Schema::create('order', function (Blueprint $table) {
+            $table->id();
+            $table->enum('state', ['pendant', 'in_progress', 'complete', 'canceled']);
+            $table->float('total');
+            $table->string('shipping_address');
+            $table->date('order_date');
+            $table->date('delivery_date');
+        });
+        
     }
 
     /**

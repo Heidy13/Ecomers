@@ -12,8 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('requested_detail', function (Blueprint $table) {
+
             $table->id();
-            
+            $table->integer('amount');
+            $table->float('price');
+            $table->unsignedBigInteger('id_order');
+            $table->foreign('id_order')->references('id')->on('order');
+            $table->unsignedBigInteger('id_product');
+            $table->foreign('id_product')->references('id')->on('product');
         });
     }
 
