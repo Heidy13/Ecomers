@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\Token;
 
 class UserController extends Controller
 {
@@ -21,7 +22,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request['password']),
-                'phone' => $request->iphone,
+                'phone' => $request->phone,
                 'location' => $request->location,
                 'date_register' => now()
             ]);
@@ -80,59 +81,43 @@ class UserController extends Controller
         return $info;
     }
 
+    public function edit (Request $request, $id) {
 
+        try {
 
+            $user = User::where('id', $id);
+            if (!$user) {
+                 return response()->json(['error' => 'User not fount']);
+            }
 
-    public function index()
-    {
-        //
+            $user -> update([
+                'name' => $request ->name,
+                'email' => $request ->email,
+                'password' => Hash::make($request['password']),
+                'phone' => $request ->phone,
+                'location' => $request ->location,
+            ]);
+        return response()->json(['message' => 'User update correct: ']);
+
+        } catch (Exception $e) {
+            return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    public function logout (Request $request) {
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $user = $request ->user();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if ($user) {
+            $token = $request->bearerToken();
+            $tokenModel = Token::where('id',$token)->first();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            if ($tokenModel) {
+                $tokenModel->delete();
+                return response()->json(['message' => 'Successfully logged out']);
+            }
+            return response()->json(['message' => 'Token not found']);
+        }
+        return response()->json(['message' => 'User not found']);
     }
 }
