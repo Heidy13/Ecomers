@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('price');
-            $table->string('stock');
+            $table->float('price');
+            $table->integer('stock');
             $table->string('image');
             $table->date('create_date');
             $table->unsignedBigInteger('id_user');
