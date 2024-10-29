@@ -81,7 +81,7 @@ class UserController extends Controller
         return $info;
     }
 
-    public function edit (Request $request, $id) {
+    public function update (Request $request, $id) {
 
         try {
 

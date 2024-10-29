@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -23,17 +24,6 @@ class ProductController extends Controller
         
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         try {
@@ -50,30 +40,11 @@ class ProductController extends Controller
 
             return response()->json(['message'=>'Producto creado'], 201);
 
-        } catch (Exception $th) {
+        } catch (Exception $e) {
             return response()-> json(['error' => 'error:'.$e->getMessage()]);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         try {
@@ -102,9 +73,6 @@ class ProductController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         try {
@@ -113,15 +81,12 @@ class ProductController extends Controller
             if (!$product) {
                 return response()->json(['error'=>'Producto no encontrado'], 400);
             }
-
+            
             $product->delete();
-
-
+            
             return response()->json(['message'=> 'Pruducto eliminado correctamente'], 200);
-        } catch (Exeption $e) {
+        } catch (Exception $e) {
             return response()->json(['error'=>'error:'.$e->getMessage()]);
         }
-
-        
     }
 }
