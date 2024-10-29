@@ -13,35 +13,35 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function register (Request $request) {
+    public function register(Request $request)
+    {
 
         try {
             $register = User::create([
-            'name' => $request -> name,
-            'email' => $request -> email,
-            'password' => Hash::make($request['password']),
-            'phone' => $request -> iphone,
-            'location' => $request -> location,
-            'date_register' => now()
-        ]);
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request['password']),
+                'phone' => $request->iphone,
+                'location' => $request->location,
+                'date_register' => now()
+            ]);
 
-        return response()->json($register);
-
+            return response()->json($register);
         } catch (Exception $e) {
-            return response()->json(['error' => 'An error occurred: ' .$e ->getMessage()]);
+            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()]);
         }
     }
 
-    public function login (Request $request) {
+    public function login(Request $request)
+    {
 
         try {
 
-            $request -> validate([
+            $request->validate([
                 'email' => 'string|email',
                 'password' => 'string'
             ]);
 
-            // $user = User::where('email', $request->email)->with('user')->first();
             $user = User::where('email', $request->email)->first();
             if (!$user) {
                 return response()->json(['error' => 'the email not foud']);
@@ -52,35 +52,36 @@ class UserController extends Controller
             }
 
             $tokenResult = $user->createToken('Personal Access Token');
-            // $token = $tokenResult->token;
-            $token = $tokenResult -> plainTextToken;
-            // $token -> save();
+            $token = $tokenResult->token;
+            $token->save();
 
-            // $aditionalInfo = $this->getAdditionalInfo($user);
+            $aditionalInfo = $this->getAdditionalInfo($user);
 
             return response()->json([
-                // 'acces_token' => $tokenResult->accesToken,
-                'acces_token' => $token,
+                'acces_token' => $tokenResult->accessToken,
                 'token_type' => 'Bearer',
-                // 'user' => $aditionalInfo
+                'user' => $aditionalInfo
             ]);
-            
         } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: ' .$e ->getMessage()]);
+            return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
         }
     }
 
-    protected function getAdditionalInfo ($user) {
+    protected function getAdditionalInfo($user)
+    {
         $info = [];
-        $user ->$info = [
+
+        $info = [
             'id' => $user->id,
             'name' => $user->name,
+            'rol' => $user->role
         ];
+        
         return $info;
     }
 
 
- 
+
 
     public function index()
     {
