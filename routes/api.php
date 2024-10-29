@@ -28,7 +28,9 @@ Route::group([
     'prefix' => 'admin',
     'middleware' => 'auth:api'
 ],function () {
+    //crear categoria
     Route::post('/store',[CategoryController::class, 'store']);
+    //editar categoria
     Route::put('/update/{id}',[CategoryController::class, 'update']);
 });
 
