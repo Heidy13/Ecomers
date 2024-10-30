@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AbilityController;
 use App\Http\Controllers\Api\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
@@ -32,5 +33,21 @@ Route::group([
     Route::post('/store',[CategoryController::class, 'store']);
     //editar categoria
     Route::put('/update/{id}',[CategoryController::class, 'update']);
+});
+
+Route::group([
+    'prefix' => 'craftsman',
+    'middleware' => 'auth:api'
+],function() {
+    //ver habilidades
+    Route::get('/index',[AbilityController::class, 'index']);
+    //crear Habilidad
+    Route::post('/store',[AbilityController::class, 'store']);
+    //editar habilidad
+    Route::put('/update/{id}',[AbilityController::class, 'update']);
+    //ver habilidades por artesano
+    Route::get('/show/{id}',[AbilityController::class, 'show']);
+    
+
 });
 
