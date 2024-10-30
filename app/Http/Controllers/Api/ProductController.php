@@ -19,7 +19,7 @@ class ProductController extends Controller
             return response()->json($product, 200);
             
         } catch (Exception $e) {
-            return response()->json(['error' => 'error: '.$e->getMessage()]);
+            return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
         }
         
     }
@@ -41,7 +41,7 @@ class ProductController extends Controller
             return response()->json(['message'=>'Producto creado'], 201);
 
         } catch (Exception $e) {
-            return response()-> json(['error' => 'error:'.$e->getMessage()]);
+            return response()-> json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
         }
     }
 
@@ -69,7 +69,7 @@ class ProductController extends Controller
             return response()->json(['message' => 'Producto actualizado'], 200);
 
         } catch (Exception $e) {
-            return response()-> json(['error' => 'error:'.$e->getMessage()]);
+            return response()-> json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
         }
     }
 
@@ -86,7 +86,7 @@ class ProductController extends Controller
             
             return response()->json(['message'=> 'Pruducto eliminado correctamente'], 200);
         } catch (Exception $e) {
-            return response()->json(['error'=>'error:'.$e->getMessage()]);
+            return response()->json(['error'=>'An error ocurrerd: '.$e->getMessage()]);
         }
     }
 }

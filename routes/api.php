@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AbilityController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
@@ -47,7 +48,13 @@ Route::group([
     Route::put('/update/{id}',[AbilityController::class, 'update']);
     //ver habilidades por artesano
     Route::get('/show/{id}',[AbilityController::class, 'show']);
-    
 
+    //********************************PEDIDOS********************************** */
+    //crear pedido
+    Route::post('/storeOrder',[OrderController::class, 'store']);
+    //editar estado del pedido
+    Route::put('/updateOrder/{id}',[OrderController::class, 'update']);
 });
+
+
 
