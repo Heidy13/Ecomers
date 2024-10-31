@@ -9,22 +9,17 @@ class Cart extends Model
     protected $table = 'cart';
 
     protected $fillable = [
-        'amount',
-        'date_added',
-        'id_user',
-        'id_product',
+        'id_cart_detail',
     ];
 
     public $timestamps = false;
-
-    public function user () {
-        return $this->belongsTo(User::class ,'id_user');
-    }
 
     public function product () {
         return $this->hasMany(Product::class, 'id_product');
     }
 
-    
+    public function cart_detail(){
+        return $this->hasMany(Cart_detail::class, 'id_cart_detail');
+    }
 
 }

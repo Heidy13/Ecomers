@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Cart;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -119,5 +120,25 @@ class UserController extends Controller
             return response()->json(['message' => 'Token not found']);
         }
         return response()->json(['message' => 'User not found']);
+    }
+
+    public function createCart(Request $request){
+
+    try {
+        $cart = Cart::create([
+            'amount'=>$request->input('amount'),
+            'date_added'=>$request->input('date_added'),
+            'id_user'=>$request->input('id_user'),
+            'id_product'=>$request->input('id_product')
+        ]);
+
+        return response()->json(['message'=>'Carrito creado con exito', $cart], 200);
+
+    } catch (Exception $e) {
+        return response()->json(['error'=>'error:'.$e->getMessage()]);
+    }
+
+
+       
     }
 }

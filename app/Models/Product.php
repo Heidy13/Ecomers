@@ -36,4 +36,8 @@ class Product extends Model
     public function request_detail () {
         return $this-> belongsTo(Request_detail::class, 'id_product');
     }
+
+    public function cart_detail(){
+        return $this->belongsTo(Cart_detail::class, 'id_product');
+    }
 }

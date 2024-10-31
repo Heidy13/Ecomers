@@ -36,8 +36,8 @@ class User extends Authenticatable
         return $this->hasMany(Ability::class, 'id_user');
     }
     
-    public function cart () {
-        return $this->hasOne(Cart::class, 'id_user');
+    public function cart_detail () {
+        return $this->hasMany(Cart_detail::class, 'id_user');
     }
     
     public function orders () {

@@ -24,3 +24,10 @@ Route::group([
     Route::delete('/deleteProduct/{id}', [ProductController::class, 'destroy']);
 });
 
+Route::group([
+    'prefix' => 'cart',
+    'middleware' => 'auth:api'
+],function () {
+    Route::post('/createCart', [UserController::class, 'createCart']);
+});
+Route::post('/createCart', [UserController::class, 'createCart']);
