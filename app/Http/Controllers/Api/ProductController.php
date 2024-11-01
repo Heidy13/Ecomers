@@ -21,7 +21,16 @@ class ProductController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
         }
-        
+    }
+
+    public function ProductxId($id){
+        try {
+            $prudctid = Product::where('id', $id)->first();
+
+            return response()->json($prudctid);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'error:'.$e->getMessage()]);
+        }
     }
 
     public function store(Request $request)

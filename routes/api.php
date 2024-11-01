@@ -18,9 +18,10 @@ Route::group([
 
 Route::group([  
     'prefix' => 'product',
-    'middleware' => 'auth:api'
+    // 'middleware' => 'auth:api'
 ],function () {
     Route::get('/productAll', [ProductController::class, 'index']);
+    Route::get('/productxid/{id}', [ProductController::class, 'ProductxId']);
     Route::post('/createProduct', [ProductController::class, 'store']);
     Route::put('/editProduct/{id}', [ProductController::class, 'update']);
     Route::delete('/deleteProduct/{id}', [ProductController::class, 'destroy']);
