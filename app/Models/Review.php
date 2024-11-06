@@ -26,7 +26,7 @@ class Review extends Model
     }
 
     public function ability () {
-        return $this-> hasMany(Ability::class, 'id_ablility');
+        return $this-> hasMany(Ability::class, 'id_ability');
     }
 
     public $timestamps = false;

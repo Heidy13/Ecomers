@@ -32,7 +32,7 @@ class OrderController extends Controller
                 'id_user' => $request -> id_user,
             ]);
 
-            return response()->json(['message' => 'order created successfully']);
+            return response()->json(['message' => 'Order created successfully']);
             
         } catch (Exception $e) {
             return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
