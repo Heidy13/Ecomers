@@ -24,6 +24,12 @@ Route::group([
 ],function () {
     Route::post('/createCartDetail', [CustomerController::class, 'cartDetail']);
     Route::post('/createCart', [CustomerController::class, 'cart']);
+     //crear una reseña
+     Route::post('/createReview', [ReviewController::class, 'store']);
+     //ver reseñas a partir de id del producto
+     Route::get('/review_product/{id}',[ReviewController::class, 'review_product']);
+     //editar receña
+     Route::put('/updateReview/{id}',[ReviewController::class,'update']);
 });
 
 Route::group([  
@@ -79,15 +85,3 @@ Route::group([
 });
 Route::post('/createCart', [UserController::class, 'createCart']);
 
-Route::group([
-    'prefix' => 'customer',
-    'middleware' => 'auth:api'
-],function () {
-    //crear una reseña
-    Route::post('/createReview', [ReviewController::class, 'store']);
-    //ver reseñas a partir de id del producto
-    Route::get('/review_product/{id}',[ReviewController::class, 'review_product']);
-    //editar receña
-    Route::put('/updateReview/{id}',[ReviewController::class,'update']);
-    
-});
