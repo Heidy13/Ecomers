@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Cart;
+use App\Models\Cart_detail;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -137,8 +138,5 @@ class UserController extends Controller
     } catch (Exception $e) {
         return response()->json(['error'=>'error:'.$e->getMessage()]);
     }
-
-
-       
     }
 }

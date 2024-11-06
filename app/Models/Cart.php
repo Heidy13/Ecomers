@@ -9,17 +9,22 @@ class Cart extends Model
     protected $table = 'cart';
 
     protected $fillable = [
-        'id_cart_detail',
+        'id_user'
     ];
 
     public $timestamps = false;
 
-    public function product () {
-        return $this->hasMany(Product::class, 'id_product');
+    public function user(){
+        return $this->hasMany(User::class, 'id_user');
     }
 
-    public function cart_detail(){
-        return $this->hasMany(Cart_detail::class, 'id_cart_detail');
+    public function addProduct($productId, $amount)
+    {
+        // Crear o actualizar el producto en los detalles del carrito
+        return $this->cartDetails()->updateOrCreate(
+            ['id_product' => $productId],
+            ['amount' => $amount, 'date_added' => now()]
+        );
     }
 
 }

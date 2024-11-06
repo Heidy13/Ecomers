@@ -13,7 +13,8 @@ class Cart_detail extends Model
         'amount',
         'date_added',
         'id_product',
-        'id_user',
+        // 'id_user',
+        'id_cart',  
     ];
 
     public function user () {
@@ -25,7 +26,7 @@ class Cart_detail extends Model
     }
 
     public function cart(){
-        return $this->belongsTo(Cart::class, 'id_cart_detail');
+        return $this->belongsTo(Cart::class, 'id_cart');
     }
 
     public $timestamps = false;

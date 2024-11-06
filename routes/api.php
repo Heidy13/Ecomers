@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AbilityController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
@@ -14,6 +15,14 @@ Route::group([
     Route::post('/login',[UserController::class, 'login']);
     Route::put('/update/{id}',[UserController::class, 'edit']);
     Route::post('/logout',[UserController::class, 'logout'])->middleware('auth:api');
+});
+
+Route::group([
+    'prefix' => 'customer',
+    'middleware' => 'auth:api'
+],function () {
+    Route::post('/createCartDetail', [CustomerController::class, 'cartDetail']);
+    Route::post('/createCart', [CustomerController::class, 'cart']);
 });
 
 Route::group([  
@@ -58,10 +67,5 @@ Route::group([
 
 
 
-Route::group([
-    'prefix' => 'cart',
-    'middleware' => 'auth:api'
-],function () {
-    Route::post('/createCart', [UserController::class, 'createCart']);
-});
-Route::post('/createCart', [UserController::class, 'createCart']);
+
+
