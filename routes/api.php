@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
 
 Route::group([
@@ -35,6 +36,8 @@ Route::group([
     Route::post('/store',[CategoryController::class, 'store']);
     //editar categoria
     Route::put('/update/{id}',[CategoryController::class, 'update']);
+    //eliminar reseñas
+    Route::delete('/deleteReview/{id}',[ReviewController::class, 'delete']);
 });
 
 Route::group([
@@ -66,3 +69,16 @@ Route::group([
     Route::post('/createCart', [UserController::class, 'createCart']);
 });
 Route::post('/createCart', [UserController::class, 'createCart']);
+
+Route::group([
+    'prefix' => 'customer',
+    'middleware' => 'auth:api'
+],function () {
+    //crear una reseña
+    Route::post('/createReview', [ReviewController::class, 'store']);
+    //ver reseñas a partir de id del producto
+    Route::get('/review_product/{id}',[ReviewController::class, 'review_product']);
+    //editar receña
+    Route::put('/updateReview/{id}',[ReviewController::class,'update']);
+    
+});
