@@ -34,7 +34,7 @@ Route::group([
 
 Route::group([  
     'prefix' => 'product',
-    'middleware' => 'auth:api'
+    // 'middleware' => 'auth:api'
 ],function () {
     Route::get('/productAll', [ProductController::class, 'index']);
     Route::get('/productxid/{id}', [ProductController::class, 'ProductxId']);
