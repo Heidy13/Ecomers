@@ -19,20 +19,34 @@ class UserController extends Controller
     public function register(Request $request)
     {
 
-        try {
-            $register = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request['password']),
-                'phone' => $request->phone,
-                'location' => $request->location,
-                'date_register' => now()
-            ]);
+        // try {
 
-            return response()->json($register);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()]);
-        }
+            $field = $request -> validate([
+                'name' => 'required',
+                'email'=> 'required|email',
+                'password'=> 'required',
+                'phone'=> 'required',
+                'location'=> 'required',
+                'date_register'=> now(),
+            ]); 
+
+            $user = User::create($field);
+
+            // $register = User::create([
+            //     'name' => $request->name,
+            //     'email' => $request->email,
+            //     'password' => Hash::make($request['password']),
+            //     'phone' => $request->phone,
+            //     'location' => $request->location,
+            //     'date_register' => now()
+            // ]);
+
+
+
+            return response()->json($user);
+        // } catch (Exception $e) {
+        //     return response()->json(['error' => 'An error occurred: ' . $e->getMessage()]);
+        // }
     }
 
     public function login(Request $request)
