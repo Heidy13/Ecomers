@@ -18,70 +18,45 @@ class UserController extends Controller
      */
     public function register(Request $request)
     {
-
-        // try {
-
-            $field = $request -> validate([
-                'name' => 'required',
-                'email'=> 'required|email',
-                'password'=> 'required',
-                'phone'=> 'required',
-                'location'=> 'required',
-                'date_register'=> now(),
-            ]); 
-
-            $user = User::create($field);
-
-            // $register = User::create([
-            //     'name' => $request->name,
-            //     'email' => $request->email,
-            //     'password' => Hash::make($request['password']),
-            //     'phone' => $request->phone,
-            //     'location' => $request->location,
-            //     'date_register' => now()
-            // ]);
-
-
-
-            return response()->json($user);
-        // } catch (Exception $e) {
-        //     return response()->json(['error' => 'An error occurred: ' . $e->getMessage()]);
-        // }
+        $field = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+            'phone' => 'required',
+            'location' => 'required',
+            'date_register' => now(),
+        ]);
+        $user = User::create($field);
+        return response()->json($user);
     }
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+            'password' => 'required'
+        ]);
 
-        try {
-
-            $request->validate([
-                'email' => 'string|email',
-                'password' => 'string'
-            ]);
-
-            $user = User::where('email', $request->email)->first();
-            if (!$user) {
-                return response()->json(['error' => 'the email not foud']);
-            }
-
-            if (!Hash::check($request->password, $user->password)) {
-                return response()->json(['error' => 'the password is incorrect']);
-            }
-
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            $token->save();
-
-            $aditionalInfo = $this->getAdditionalInfo($user);
-
-            return response()->json([
-                'acces_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'user' => $aditionalInfo
-            ]);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['error' => 'the email not foud']);
         }
+
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'the password is incorrect']);
+        }
+
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        $token->save();
+
+        $aditionalInfo = $this->getAdditionalInfo($user);
+
+        return response()->json([
+            'acces_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'user' => $aditionalInfo
+        ]);
     }
 
     protected function getAdditionalInfo($user)
@@ -93,64 +68,71 @@ class UserController extends Controller
             'name' => $user->name,
             'rol' => $user->role
         ];
-        
+
         return $info;
     }
 
-    public function update (Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
         try {
 
             $user = User::where('id', $id);
             if (!$user) {
-                 return response()->json(['error' => 'User not fount']);
+                return response()->json(['error' => 'User not fount']);
             }
 
-            $user -> update([
-                'name' => $request ->name,
-                'email' => $request ->email,
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
                 'password' => Hash::make($request['password']),
-                'phone' => $request ->phone,
-                'location' => $request ->location,
+                'phone' => $request->phone,
+                'location' => $request->location,
             ]);
-        return response()->json(['message' => 'User update correct: ']);
-
+            return response()->json(['message' => 'User update correct: ']);
         } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
+            return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
         }
     }
 
-    public function logout (Request $request) {
+    public function logout(Request $request)
+    {
 
-        $user = $request ->user();
 
-        if ($user) {
-            $token = $request->bearerToken();
-            $tokenModel = Token::where('id',$token)->first();
+       $request->user()->tokens()->delete();
 
-            if ($tokenModel) {
-                $tokenModel->delete();
-                return response()->json(['message' => 'Successfully logged out']);
-            }
-            return response()->json(['message' => 'Token not found']);
+        return [
+            'message' => 'You are logged out.'
+        ];
+        // $user = $request->user();
+
+        // if ($user) {
+        //     $token = $request->bearerToken();
+        //     $tokenModel = Token::where('id', $token)->first();
+
+        //     if ($tokenModel) {
+        //         $tokenModel->delete();
+        //         return response()->json(['message' => 'Successfully logged out']);
+        //     }
+        //     return response()->json(['message' => 'Token not found']);
+        // }
+        // return response()->json(['message' => 'User not found']);
+    }
+
+    public function createCart(Request $request)
+    {
+
+        try {
+            $cart = Cart::create([
+                'amount' => $request->input('amount'),
+                'date_added' => $request->input('date_added'),
+                'id_user' => $request->input('id_user'),
+                'id_product' => $request->input('id_product')
+            ]);
+
+            return response()->json(['message' => 'Carrito creado con exito', $cart], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'error:' . $e->getMessage()]);
         }
-        return response()->json(['message' => 'User not found']);
-    }
-
-    public function createCart(Request $request){
-
-    try {
-        $cart = Cart::create([
-            'amount'=>$request->input('amount'),
-            'date_added'=>$request->input('date_added'),
-            'id_user'=>$request->input('id_user'),
-            'id_product'=>$request->input('id_product')
-        ]);
-
-        return response()->json(['message'=>'Carrito creado con exito', $cart], 200);
-
-    } catch (Exception $e) {
-        return response()->json(['error'=>'error:'.$e->getMessage()]);
-    }
     }
 }
