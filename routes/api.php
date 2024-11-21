@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\UserController;
+use Illuminate\Http\Request;
+
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 Route::group([
     'prefix' => 'auth'
@@ -15,8 +21,8 @@ Route::group([
     Route::post('/register',[UserController::class, 'register']);
     Route::post('/login',[UserController::class, 'login']);
     Route::put('/update/{id}',[UserController::class, 'edit']);
-    Route::post('/logout',[UserController::class, 'logout'])->middleware('auth:api');
 });
+Route::post('/logout',[UserController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::group([
     'prefix' => 'customer',

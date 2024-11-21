@@ -38,25 +38,39 @@ class UserController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-        if (!$user) {
-            return response()->json(['error' => 'the email not foud']);
+
+        if (!$user || ! Hash::check($request->password, $user->password)) {
+            return [
+                'errors' => [
+                    'email' => [
+                        'The provided credentials are incorrect'
+                    ]
+                ]
+            ];
         }
 
-        if (!Hash::check($request->password, $user->password)) {
-            return response()->json(['error' => 'the password is incorrect']);
-        }
+        $token = $user->createToken($user->name);
 
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-        $token->save();
+        return [
+            'user' => $user,
+            'token' => $token->plainTextToken
+        ];
 
-        $aditionalInfo = $this->getAdditionalInfo($user);
+        // if (!Hash::check($request->password, $user->password)) {
+        //     return response()->json(['error' => 'the password is incorrect']);
+        // }
 
-        return response()->json([
-            'acces_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'user' => $aditionalInfo
-        ]);
+        // $tokenResult = $user->createToken('Personal Access Token');
+        // $token = $tokenResult->token;
+        // $token->save();
+
+        // $aditionalInfo = $this->getAdditionalInfo($user);
+
+        // return response()->json([
+        //     'token' => $tokenResult->accessToken,
+        //     'token_type' => 'Bearer',
+        //     'user' => $aditionalInfo
+        // ]);
     }
 
     protected function getAdditionalInfo($user)
@@ -97,13 +111,17 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-
-
-       $request->user()->tokens()->delete();
+        try {
+            $request->user()->tokens()->delete();
 
         return [
             'message' => 'You are logged out.'
         ];
+        } catch (Exception $e) {
+            return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
+        }
+
+       
         // $user = $request->user();
 
         // if ($user) {
