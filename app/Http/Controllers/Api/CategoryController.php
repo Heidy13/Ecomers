@@ -21,15 +21,13 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $category = Category::create([
-                'name' => $request->name,
-                'description' => $request->description,
-            ]);
-            return response()->json(['message' => 'category created successfully']);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
-        }
+        $field = $request->validate([
+            'name' => 'required|string|max:25|unique:category',
+            'description' => 'required|string|max:50'
+       ]);
+
+       $category = Category::create($field);
+       return response()->json($category);
     }
 
     public function update(Request $request, $id)
@@ -50,5 +48,11 @@ class CategoryController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
         }
+    }
+
+    public function show () {
+
+        
+
     }
 }

@@ -40,7 +40,7 @@ Route::group([
 
 Route::group([  
     'prefix' => 'product',
-    // 'middleware' => 'auth:api'
+    'middleware' => 'auth:sanctum'
 ],function () {
     Route::get('/productAll', [ProductController::class, 'index']);
     Route::get('/productxid/{id}', [ProductController::class, 'ProductxId']);
@@ -51,15 +51,17 @@ Route::group([
 
 Route::group([
     'prefix' => 'admin',
-    'middleware' => 'auth:api'
+    'middleware' => 'auth:sanctum'
 ],function () {
     //crear categoria
     Route::post('/store',[CategoryController::class, 'store']);
+    //ver categoria
     //editar categoria
     Route::put('/update/{id}',[CategoryController::class, 'update']);
     //eliminar reseñas
     Route::delete('/deleteReview/{id}',[ReviewController::class, 'delete']);
 });
+Route::get('/categories',[CategoryController::class, 'index']);
 
 Route::group([
     'prefix' => 'craftsman',

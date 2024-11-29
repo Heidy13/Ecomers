@@ -22,8 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_ability_offered');
             $table->foreign('id_ability_offered')->references('id')->on('ability');
             $table->enum('state',['earring','accepted','refused','filled']);
-            $table->timestamp('date_filled')->nullable(); //toca arreglarlo porque no debe ir nulo
-            $table->timestamp('date_answer')->nullable(); //toca arreglarlo porque no debe ir nulo
+            $table->timestamp('date_filled')->nullable(); 
+            $table->timestamp('date_answer')->nullable(); 
         });
     }
 

@@ -55,22 +55,6 @@ class UserController extends Controller
             'user' => $user,
             'token' => $token->plainTextToken
         ];
-
-        // if (!Hash::check($request->password, $user->password)) {
-        //     return response()->json(['error' => 'the password is incorrect']);
-        // }
-
-        // $tokenResult = $user->createToken('Personal Access Token');
-        // $token = $tokenResult->token;
-        // $token->save();
-
-        // $aditionalInfo = $this->getAdditionalInfo($user);
-
-        // return response()->json([
-        //     'token' => $tokenResult->accessToken,
-        //     'token_type' => 'Bearer',
-        //     'user' => $aditionalInfo
-        // ]);
     }
 
     protected function getAdditionalInfo($user)
@@ -90,12 +74,10 @@ class UserController extends Controller
     {
 
         try {
-
             $user = User::where('id', $id);
             if (!$user) {
                 return response()->json(['error' => 'User not fount']);
             }
-
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -120,21 +102,6 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
         }
-
-       
-        // $user = $request->user();
-
-        // if ($user) {
-        //     $token = $request->bearerToken();
-        //     $tokenModel = Token::where('id', $token)->first();
-
-        //     if ($tokenModel) {
-        //         $tokenModel->delete();
-        //         return response()->json(['message' => 'Successfully logged out']);
-        //     }
-        //     return response()->json(['message' => 'Token not found']);
-        // }
-        // return response()->json(['message' => 'User not found']);
     }
 
     public function createCart(Request $request)
