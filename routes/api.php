@@ -19,7 +19,7 @@ Route::group([
     'prefix' => 'auth'
 ],function () {
     Route::post('/register',[UserController::class, 'register']);
-    Route::post('/login',[UserController::class, 'login']);
+    Route::post('login',[UserController::class, 'login']);
     Route::put('/update/{id}',[UserController::class, 'edit']);
 });
 Route::post('/logout',[UserController::class, 'logout'])->middleware('auth:sanctum');
@@ -67,15 +67,6 @@ Route::group([
     'prefix' => 'craftsman',
     'middleware' => 'auth:api'
 ],function() {
-    //ver habilidades
-    Route::get('/index',[AbilityController::class, 'index']);
-    //crear Habilidad
-    Route::post('/store',[AbilityController::class, 'store']);
-    //editar habilidad
-    Route::put('/update/{id}',[AbilityController::class, 'update']);
-    //ver habilidades por artesano
-    Route::get('/show/{id}',[AbilityController::class, 'show']);
-
     //********************************PEDIDOS********************************** */
     //crear pedido
     Route::post('/storeOrder',[OrderController::class, 'store']);
@@ -92,4 +83,11 @@ Route::group([
     Route::post('/createCart', [UserController::class, 'createCart']);
 });
 Route::post('/createCart', [UserController::class, 'createCart']);
+
+
+
+
+Route::middleware(['auth:api', 'role'=>'craftsman'])->group(function (){
+    Route::apiResource('ability',AbilityController::class);
+});
 

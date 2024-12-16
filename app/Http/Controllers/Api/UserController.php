@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Cart;
-use App\Models\Cart_detail;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Passport\Token;
+
 
 class UserController extends Controller
 {
@@ -37,24 +38,48 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $credentials = request(['email','password']);
+        if (!Auth::attempt($credentials))
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        
+            $user = $request->user();
+            $tokenResult = $user->createToken('Personal Access Token');
+            
+            $token = $tokenResult->token;
+            if ($request->remember_me)
+            $token->expires_at = Carbon::now()->addWeeks(1);
+            $token->save();
 
-        if (!$user || ! Hash::check($request->password, $user->password)) {
-            return [
-                'errors' => [
-                    'email' => [
-                        'The provided credentials are incorrect'
-                    ]
-                ]
-            ];
-        }
+            // return response()->json([
+            //     'id' => $user->id,
+            //     'access_token' => $tokenResult->accessToken,
+            //     'name' => $user->name,
+            //     'email' => $user->email,
+            //     "rol" => $user->getRoleNames(),
+            //     'token_type' => 'Bearer',
+            //     'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
+            // ]);
 
-        $token = $user->createToken($user->name);
+        // $user = User::where('email', $request->email)->first();
 
-        return [
-            'user' => $user,
-            'token' => $token->plainTextToken
-        ];
+        // if (!$user || ! Hash::check($request->password, $user->password)) {
+        //     return [
+        //         'errors' => [
+        //             'email' => [
+        //                 'The provided credentials are incorrect'
+        //             ]
+        //         ]
+        //     ];
+        // }
+
+        // $token = $user->createToken($user->name);
+
+        // return [
+        //     'user' => $user,
+        //     'token' => $token->plainTextToken
+        // ];
     }
 
     protected function getAdditionalInfo($user)
