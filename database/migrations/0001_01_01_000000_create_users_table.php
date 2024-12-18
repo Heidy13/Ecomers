@@ -22,7 +22,6 @@ return new class extends Migration
             $table->text('biography')->nullable();
             $table->text('profile_photo')->nullable();
             $table->enum('role',['craftsman','customer','admin'])->default(('customer'));
-            // $table->timestamp('date_register')->nullable(); //toca arreglarlo porque no debe ir nulo
             $table->timestamp('date_register')->useCurrent();
             $table->rememberToken();
             $table->timestamps();

@@ -66,13 +66,13 @@ Route::group([
     'middleware' => 'auth:api'
 ],function() {
     //ver habilidades
-    Route::get('/index',[AbilityController::class, 'index']);
+    // Route::get('/index',[AbilityController::class, 'index']);
     //crear Habilidad
-    Route::post('/store',[AbilityController::class, 'store']);
+    // Route::post('/store',[AbilityController::class, 'store']);
     //editar habilidad
-    Route::put('/update/{id}',[AbilityController::class, 'update']);
+    // Route::put('/update/{id}',[AbilityController::class, 'update']);
     //ver habilidades por artesano
-    Route::get('/show/{id}',[AbilityController::class, 'show']);
+    // Route::get('/show/{id}',[AbilityController::class, 'show']);
 
     //********************************PEDIDOS********************************** */
     //crear pedido
@@ -91,3 +91,4 @@ Route::group([
 });
 Route::post('/createCart', [UserController::class, 'createCart']);
 
+Route::apiResource('ability', AbilityController::class);

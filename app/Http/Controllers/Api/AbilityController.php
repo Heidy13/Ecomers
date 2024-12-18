@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ability;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AbilityController extends Controller
 {
@@ -20,22 +22,16 @@ class AbilityController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            
-            $ability = Ability::create([
-            'name' => $request -> name,
-            'description' => $request -> description,
-            'creation_date' => now(),
-            'id_user' => $request -> id_user,
+            $filds = $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string|max:50',
+            'id_user' => ['required', 'exists:users,id'],
         ]);
+        $filds['creation_date'] = Carbon::now()->format('Y-m-d');
 
-        return response()->json(['message' => 'Ability created successfully']);
-
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: '.$e->getMessage()]);
-        }
-
-        
+        $ability = Ability::create($filds);
+        // return response()->json($ability);
+        return Response::HTTP_CREATED; 
     }
 
     public function update(Request $request, string $id)
@@ -68,6 +64,18 @@ class AbilityController extends Controller
         } catch (Exception $e) {
             return response()->json(['error' => 'An error ocirrerd: '.$e->getMessage()]);
         }
+    }
+
+
+    public function destroy ($id) {
+
+        $ability = Ability::find($id);
+
+        if (!$ability) {
+            return Response::HTTP_NOT_FOUND;
+        }
+        $ability->delete();
+        return Response::HTTP_OK;
     }
  
 }
