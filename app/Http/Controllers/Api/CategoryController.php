@@ -21,15 +21,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $category = Category::create([
-                'name' => $request->name,
-                'description' => $request->description,
-            ]);
-            return response()->json(['message' => 'category created successfully']);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
-        }
+        
     }
 
     public function update(Request $request, $id)
