@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Cart;
 use App\Models\Cart_detail;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\Token;
 
@@ -30,48 +32,86 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email|exists:users',
+    //         'password' => 'required'
+    //     ]);
+
+    //     $user = User::where('email', $request->email)->first();
+
+    //     if (!$user || ! Hash::check($request->password, $user->password)) {
+    //         return [
+    //             'errors' => [
+    //                 'email' => [
+    //                     'The provided credentials are incorrect'
+    //                 ]
+    //             ]
+    //         ];
+    //     }
+
+    //     $token = $user->createToken($user->name);
+
+    //     return [
+    //         'user' => $user,
+    //         'token' => $token->plainTextToken
+    //     ];
+
+    //     // if (!Hash::check($request->password, $user->password)) {
+    //     //     return response()->json(['error' => 'the password is incorrect']);
+    //     // }
+
+    //     // $tokenResult = $user->createToken('Personal Access Token');
+    //     // $token = $tokenResult->token;
+    //     // $token->save();
+
+    //     // $aditionalInfo = $this->getAdditionalInfo($user);
+
+    //     // return response()->json([
+    //     //     'token' => $tokenResult->accessToken,
+    //     //     'token_type' => 'Bearer',
+    //     //     'user' => $aditionalInfo
+    //     // ]);
+    // }
+    public function login (Request $request) {
+
+        try {
+            $request->validate([
             'email' => 'required|email|exists:users',
-            'password' => 'required'
+            'password' => 'required',  
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $credentials = request(['email', 'password']);
 
-        if (!$user || ! Hash::check($request->password, $user->password)) {
-            return [
-                'errors' => [
-                    'email' => [
-                        'The provided credentials are incorrect'
-                    ]
-                ]
-            ];
+        if (!Auth::attempt($credentials)) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
         }
 
-        $token = $user->createToken($user->name);
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->plainTextToken;
+        if ($request->remember_me) {
+            $token->expires_at = Carbon::now()->addWeeks(1);
+        $token->save();
+        }
 
-        return [
+        return response()->json([
             'user' => $user,
-            'token' => $token->plainTextToken
-        ];
-
-        // if (!Hash::check($request->password, $user->password)) {
-        //     return response()->json(['error' => 'the password is incorrect']);
-        // }
-
-        // $tokenResult = $user->createToken('Personal Access Token');
-        // $token = $tokenResult->token;
-        // $token->save();
-
-        // $aditionalInfo = $this->getAdditionalInfo($user);
-
-        // return response()->json([
-        //     'token' => $tokenResult->accessToken,
-        //     'token_type' => 'Bearer',
-        //     'user' => $aditionalInfo
-        // ]);
+            'access_token' => $tokenResult->plainTextToken,
+            
+        ]);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'ocurrio un error '.$e->getMessage()]);
+        }
     }
+
+
+
+
+
 
     protected function getAdditionalInfo($user)
     {

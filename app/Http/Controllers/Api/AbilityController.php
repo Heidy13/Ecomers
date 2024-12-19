@@ -22,6 +22,7 @@ class AbilityController extends Controller
 
     public function store(Request $request)
     {
+        try {
             $filds = $request->validate([
             'name' => 'required|string',
             'description' => 'required|string|max:50',
@@ -32,6 +33,11 @@ class AbilityController extends Controller
         $ability = Ability::create($filds);
         // return response()->json($ability);
         return Response::HTTP_CREATED; 
+
+        } catch (Exception $e) {
+            return response()->json(['error' => 'ocurrio un error' .$e->getMessage()]);
+        }
+            
     }
 
     public function update(Request $request, string $id)
