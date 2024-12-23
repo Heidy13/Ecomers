@@ -22,7 +22,6 @@ class AbilityController extends Controller
 
     public function store(Request $request)
     {
-        try {
             $filds = $request->validate([
             'name' => 'required|string',
             'description' => 'required|string|max:50',
@@ -32,34 +31,28 @@ class AbilityController extends Controller
 
         $ability = Ability::create($filds);
         // return response()->json($ability);
-        return Response::HTTP_CREATED; 
-
-        } catch (Exception $e) {
-            return response()->json(['error' => 'ocurrio un error' .$e->getMessage()]);
-        }
-            
+        return Response::HTTP_CREATED;    
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request,$id)
     {
-        try {
-
-            $ability = Ability::where('id',$id);
-            if (!$ability) {
-                return response()->json(['error' => 'User not found']);
-            }
-
-            $ability -> update([
-                'name' => $request -> name,
-                'description' => $request -> description
-            ]);
-
-            return response()->json(['message' => 'Ability update successfully']);
-
-        } catch (Exception $e) {
-            return response()->json(['An error ocurrerd: '.$e->getMessage()]);
+        $ability = Ability::find($id);
+        if (!$ability) {
+            return Response::HTTP_NOT_FOUND;
         }
+
+        $request->validate([
+            'name'=> 'required|string',
+            'description'=> 'required|string|max:50'
+        ]);
+
+        $ability->update($request->all());
+        return Response::HTTP_OK;
     }
+
+
+
+
 
     public function show ($id) {
         try {
