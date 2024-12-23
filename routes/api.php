@@ -1,15 +1,15 @@
 <?php
 
-
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\UserController;
+
 
 Route::group([
     'prefix' => 'auth'
 ],function () {
-    Route::post('/register',[UserController::class, 'register']);
-    Route::post('/login',[UserController::class, 'login']);
+    Route::post('/register',[AuthController::class, 'register']);
+    Route::post('/login',[AuthController::class, 'login']);
 });
 
 Route::group([
