@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,16 +26,20 @@ class AuthController extends Controller
             // ]);
 
             // return response()->json($register);
-           $auth = $request->validate([
+           $filds = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email',
                 'password' => 'required',
                 'phone' => 'required|integer',
                 'location' => 'required|string',
-                // 'date_register' => 'required|string',
             ]);
+            $filds['date_register'] = Carbon::now()->format('Y-m-d');
 
-            $auth['date_register' ];
+            $user = User::create($filds);
+            return response()->json([
+                $user
+            ]);
+           
             
 
 
