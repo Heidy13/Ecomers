@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -18,7 +19,8 @@ return new class extends Migration
             $table->string('price');
             $table->string('stock');
             $table->string('image');
-            $table->date('create_date');
+            // $table->date('create_date');
+            $table->date('create_date')->default(DB::raw('CURRENT_DATE'));
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
             $table->unsignedBigInteger('id_category');

@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProductController;
+use Illuminate\Support\Facades\Route;
 
 
 Route::group([
@@ -12,9 +12,19 @@ Route::group([
     Route::post('/login',[AuthController::class, 'login']);
 });
 
+
 Route::group([
-    'prefix' => 'product'
-    // 'middleware' => 'auth:api'
-],function () {
-    Route::get('/product-all', [ProductController::class, 'index']);
+    'middleware' => 'auth:api'
+],function() {
+    Route::post('/logout',[AuthController::class, 'logout']);
 });
+
+
+Route::group([
+    'prefix' => 'auth'
+],function () {
+    Route::apiResource('product',ProductController::class);
+});
+
+
+

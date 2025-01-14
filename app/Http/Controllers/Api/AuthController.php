@@ -9,78 +9,50 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        $filds = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'password' => Hash::make(['required', Password::defaults()]),
+            'phone' => 'required|integer|min:1|max:10',
+            'location' => 'required|string',
+        ]);
+        $filds['date_register'] = Carbon::now()->format('Y-m-d');
 
-        try {
-            // $register = User::create([
-            //     'name' => $request->name,
-            //     'email' => $request->email,
-            //     'password' => Hash::make($request['password']),
-            //     'phone' => $request->iphone,
-            //     'location' => $request->location,
-            //     'date_register' => now()
-            // ]);
-
-            // return response()->json($register);
-           $filds = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email',
-                'password' => 'required',
-                'phone' => 'required|integer',
-                'location' => 'required|string',
-            ]);
-            $filds['date_register'] = Carbon::now()->format('Y-m-d');
-
-            $user = User::create($filds);
-            return response()->json([
-                $user
-            ]);
-           
-            
-
-
-
-
-
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error occurred: ' . $e->getMessage()]);
-        }
+        $user = User::create($filds);
+        return Response::HTTP_CREATED;
     }
 
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email|exists:users',
+            'password' => 'required'
+        ]);
 
-        try {
+        $credentials = request(['email', 'password']);
 
-            $request->validate([
-                'email' => 'required|email|exists:users',
-                'password' => 'required'
-            ]);
-
-            $credentials = request(['email', 'password']);
-
-            if (!Auth::attempt($credentials)) {
-                return response()->json(['messsage' => 'Unauthorized']);
-            }
-            $user = $request->user();
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            $token->save();
-
-            $aditionalInfo = $this->getAdditionalInfo($user);
-
-            return response()->json([
-                'acces_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'user' => $aditionalInfo
-            ]);
-        } catch (Exception $e) {
-            return response()->json(['error' => 'An error ocurrerd: ' . $e->getMessage()]);
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['messsage' => 'Unauthorized']);
         }
+        $user = $request->user();
+        $tokenResult = $user->createToken($user->role);
+        $token = $tokenResult->token;
+        $token->save();
+
+        $aditionalInfo = $this->getAdditionalInfo($user);
+
+        return response()->json([
+            'acces_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'user' => $aditionalInfo
+        ]);
     }
 
     protected function getAdditionalInfo($user)
@@ -92,8 +64,13 @@ class AuthController extends Controller
             'name' => $user->name,
             'rol' => $user->role
         ];
-        
+
         return $info;
     }
 
+    public function logout(Request $request)
+    {
+        $request->user()->token()->delete();
+        return Response::HTTP_OK;
+    }
 }
