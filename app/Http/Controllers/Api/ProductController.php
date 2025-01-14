@@ -16,8 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::all();
-        return $product;
+        // $product = Product::all();
+        // return $product;
+        return Product::all();
     }
 
     /**
@@ -34,7 +35,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
-        $product = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|unique:product,name',
             'description' => 'required|string|max:45',
             'price' => 'required|integer',
@@ -43,8 +44,17 @@ class ProductController extends Controller
             'id_user' => 'required|exists:users,id',
             'id_category' => 'required|exists:category,id',
         ]);
-        Product::create($product);
-        return response()->json(['message' => 'Producto creado con exito.'], Response::HTTP_CREATED);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error de validación',
+                'error' => $validator->errors()
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $product = Product::create($validator->validate());
+        return response()->json([
+            'message' => 'Producto creado con exito.',
+            // 'product' => $product
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -111,9 +121,9 @@ class ProductController extends Controller
     {
         $pro = Product::find($id);
         if (!$pro) {
-            return response()->json(['error'=>'Producto no encontrado.'],Response::HTTP_NOT_FOUND);
+            return response()->json(['error' => 'Producto no encontrado.'], Response::HTTP_NOT_FOUND);
         }
-        $pro -> delete();
-        return response()->json(['message'=>'Producto eliminado correctamente.'],Response::HTTP_OK);
+        $pro->delete();
+        return response()->json(['message' => 'Producto eliminado correctamente.'], Response::HTTP_OK);
     }
 }
