@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AbilityController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
@@ -34,6 +35,13 @@ Route::group([
     Route::apiResource('category',CategoryController::class);
 });
 
+/*******************************HABILIDAD***************************************************/ 
+Route::group([
+    'prefix'=>'auth'
+],function(){
+    Route::apiResource('ability',AbilityController::class);
+});
+    
 
 
 

@@ -53,7 +53,7 @@ class ProductController extends Controller
         $product = Product::create($validator->validate());
         return response()->json([
             'message' => 'Producto creado con exito.',
-            // 'product' => $product
+            // 'product' => $product    
         ], Response::HTTP_CREATED);
     }
 

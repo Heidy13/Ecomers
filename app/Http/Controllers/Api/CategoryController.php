@@ -99,7 +99,7 @@ class CategoryController extends Controller
         }
 
         $cate->update($validator->validate());
-        return response()->json(['message' => 'Categoria actualizada con exito.']);
+        return response()->json(['message' => 'Categoria actualizada con exito.'],Response::HTTP_OK);
     }
 
     /**
@@ -113,6 +113,6 @@ class CategoryController extends Controller
             return response()->json(['error' => 'Categoria no encontrada.'],Response::HTTP_NOT_FOUND);
         }
         $cate -> delete();
-        return response()->json(['message' => 'Categoria eliminada correctamente.']);
+        return response()->json(['message' => 'Categoria eliminada correctamente.'],Response::HTTP_OK);
     }
 }
