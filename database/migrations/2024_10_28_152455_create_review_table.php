@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,12 +16,13 @@ return new class extends Migration
             $table->id();
             $table->string('comment');
             $table->integer('qualification');
-            $table->dateTime('date');
+            // $table->dateTime('date');
+            $table->date('date')->default(DB::raw('CURRENT_DATE'));
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_user')->references('id')->on('users');
-            $table->unsignedBigInteger('id_product');
+            $table->unsignedBigInteger('id_product')->nullable();
             $table->foreign('id_product')->references('id')->on('product');
-            $table->unsignedBigInteger('id_ability');
+            $table->unsignedBigInteger('id_ability')->nullable();
             $table->foreign('id_ability')->references('id')->on('ability');
         });
     }

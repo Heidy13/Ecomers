@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AbilityController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,7 +42,13 @@ Route::group([
 ],function(){
     Route::apiResource('ability',AbilityController::class);
 });
-    
+
+/*******************************RESEÑAS***************************************************/ 
+Route::group([
+    'prefix' => 'auth'   
+],function(){
+    Route::apiResource('review',ReviewController::class);
+});
 
 
 
